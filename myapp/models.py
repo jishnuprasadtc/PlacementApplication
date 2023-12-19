@@ -32,6 +32,10 @@ class Jobs(models.Model):
     def __str__(self) -> str:
         return self.title
     
+    def application_count(self):
+        qs=Applications.objects.filter(job=self).count()
+        return qs
+    
 class StudentProfile(models.Model):
     qualification=models.CharField(max_length=200)
     resume=models.FileField(upload_to="resumes",null=True,blank=True)
@@ -51,7 +55,7 @@ class StudentProfile(models.Model):
         return self.user.username
 
 class Applications(models.Model):
-    job=models.ForeignKey(Jobs,on_delete=models.DO_NOTHING)
+    job=models.ForeignKey(Jobs,on_delete=models.CASCADE)
     student=models.ForeignKey(User,on_delete=models.CASCADE)
     applied_date=models.DateTimeField(auto_now_add=True)
     options=(

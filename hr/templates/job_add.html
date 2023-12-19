@@ -1,8 +1,9 @@
 {%extends 'base.html'%}
 
 {%block mainblock%}
-{%if form.error%}
-{{form.error}}
+{%if form.errors%}
+
+{{form.errors}}
 {%endif%}
 <div class="container d-flex justify-content-around">
     <form action="" method="post" class="bg-white m-2 p-1 w-75 rounded-3" enctype="multipart/form-data">
@@ -15,8 +16,11 @@
             <div class="col-lg-6 col-md-6 col-sm-12 col-12 mt-4"><label for="">Category :</label>
                 {{form.category}}
             </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12 mt-4"><label  for="">job_type:</label>
+                {{form.job_type}}
+           </div>
             <div class="col-lg-6 col-md-6 col-sm-12 col-12 mt-4"><label class="" for="">Company
-                    :</label><input type="text" name="company" class="form-control"></div>
+                        :</label><input type="text" name="company" class="form-control"></div>
             <div class="col-lg-6 col-md-6 col-sm-12 col-12 mt-4"><label class="" for="">Experience
                     :</label><input type="text" name="experience" class="form-control"></div>
             <div class="col-lg-6 col-md-6 col-sm-12 col-12 mt-4"><label class="" for="">Salary

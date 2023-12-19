@@ -10,6 +10,7 @@ urlpatterns = [
     path("profile/<int:pk>",views.ProfileDetailView.as_view(),name="profile-detail"),
     path("profile/<int:pk>/change",views.profileEditView.as_view(),name="profile-edit"),
     path("jobs/<int:pk>",views.JobDetailView.as_view(),name='job-detail'),
-    path("job/<int:pk>/apply",views.ApplyJob.as_view(),name='job-apply')
+    path("job/<int:pk>/apply",views.ApplyJob.as_view(),name='job-apply'),
+    path("application/all",views.ApplicationsListView.as_view(),name='myapplication')
 
 ]

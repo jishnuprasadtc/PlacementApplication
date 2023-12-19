@@ -26,8 +26,11 @@ class StudentIndexView(ListView):
 
 
     def get_queryset(self):
-        qs=Jobs.objects.all().order_by("-Create_date")
+        my_application=Applications.objects.filter(student=self.request.user).values_list("job",flat=True)
+        qs=Jobs.objects.exclude(id__in=my_application).order_by("-Create_date")
         return qs
+    
+
 
 
 
@@ -70,7 +73,20 @@ class ApplyJob(View):
         return redirect('seeker-index')
 
 
+
+class ApplicationsListView(ListView):
+    template_name="jobseeker/application.html"
+    model=Applications
+    context_object_name="data"
+
+
+    def get_queryset(self):
+        qs=Applications.objects.filter(student=self.request.user)
+        return qs
+
+
 # class JobListview(ListView):
 #     template_name="jobseeker/Job_list.html"
 #     context_object_name="jobs"
 #     model=Jobs
+    
