@@ -1,0 +1,106 @@
+from typing import Any
+from django.db.models.query import QuerySet
+from django.shortcuts import render,redirect
+from django.views.generic import View,FormView,TemplateView,CreateView,ListView,DeleteView,UpdateView
+from django.contrib.auth import authenticate,login,logout
+from django.urls import reverse_lazy
+
+
+from myapp.models import Category,Jobs
+from hr.forms import LoginInForm,CategoryForm,JobForm,JobChangeForm
+
+
+# Create your views here.
+
+class SignInView(FormView):
+    template_name="login.html"
+    form_class=LoginInForm
+
+    def post(self,request,*args,**kwargs):
+        form=LoginInForm(request.POST)
+        if form.is_valid():
+            uname=form.cleaned_data.get("username")
+            psw=form.cleaned_data.get("password")
+            userobject=authenticate(request,username=uname,password=psw)
+            if userobject:
+                login(request,userobject)
+                print("success")
+                if request.user.is_superuser:
+                     return redirect('index')
+                else:
+                    return redirect('seeker-index')
+        print("faild")
+        return render(request,"login.html",{"form":form})
+            
+
+
+class DashBoardView(TemplateView):
+    template_name="index.html"
+  
+
+
+class SignOutView(View):
+    def get(self,request,*args,**kwargs):
+        logout(request)
+        return redirect("signin")
+
+
+class CategoryListCreateView(CreateView,ListView):
+    template_name="category.html"
+    form_class=CategoryForm
+    success_url=reverse_lazy("category")
+    context_object_name="data"
+    model=Category
+        
+
+
+class DeleteView(DeleteView):
+        model=Category
+        success_url=reverse_lazy("category")
+
+
+class categoryDeleteView(View):
+    def get(self,request,*args,**kwargs):
+        id=kwargs.get("pk")
+        Category.objects.filter(id=id).delete()
+        return redirect("category")
+
+
+
+class CreateJobView(CreateView):
+    template_name="job_add.html"
+    form_class=JobForm
+    success_url=reverse_lazy("index")
+    
+
+class JobListView(ListView):
+    template_name="job_list.html"
+    context_object_name="jobs"
+    model=Jobs
+
+    def get(self,request,*args,**kwargs):
+        qs=Jobs.objects.all()
+        if "status" in request.GET:
+            value=request.GET.get("status")
+            qs=qs.filter(status=value)
+        return render(request,self.template_name,{"jobs":qs})    
+
+    # def get_queryset(self):
+    #     return Jobs.objects.filter(status=True)
+
+
+
+
+
+class JobDeleteView(View):
+    def get(self,request,*args,**kwargs):
+        id=kwargs.get("pk")
+        Jobs.objects.filter(id=id).delete()
+        return redirect("index")
+    
+
+class JobUpdateView(UpdateView):
+    template_name="job_edit.html"
+    model=Jobs
+    form_class=JobChangeForm
+    success_url=reverse_lazy("index")
