@@ -50,6 +50,7 @@ class StudentProfile(models.Model):
     phone=models.CharField(max_length=200)
     profile_pic=models.ImageField(upload_to="profilepics",null=True,blank=True)
     user=models.OneToOneField(User,on_delete=models.CASCADE,related_name="profile")
+    saved_job=models.ManyToManyField(Jobs,null=True,related_name="saved")
 
     def __str__(self) :
         return self.user.username

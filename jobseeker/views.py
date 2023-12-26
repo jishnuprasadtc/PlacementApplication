@@ -85,8 +85,24 @@ class ApplicationsListView(ListView):
         return qs
 
 
-# class JobListview(ListView):
-#     template_name="jobseeker/Job_list.html"
-#     context_object_name="jobs"
-#     model=Jobs
+class JobSaveView(View):
+    def post(self,request,*args,**kwargs):
+        id=kwargs.get("pk")
+        job_object=Jobs.objects.get(id=id)
+        action=request.POST.get("action")
+        if action=="save":
+            request.user.profile.saved_job.add(job_object)
+        elif action=="unsave":
+            request.user.profile.saved_job.remove(job_object)
+        return redirect("seeker-index")
+        
+
+
+class SaveJobView(View):
+    def get(self,request,*args,**kwargs):
+        qs=request.user.profile.saved_job.all()
+        return render(request,"jobseeker/savedjob.html",{"data":qs})
+
     
+
+

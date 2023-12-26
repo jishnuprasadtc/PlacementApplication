@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate,login,logout
 from django.urls import reverse_lazy
 
 
-from myapp.models import Category,Jobs
+from myapp.models import Category,Jobs,Applications
 from hr.forms import LoginInForm,CategoryForm,JobForm,JobChangeForm
 
 
@@ -104,3 +104,12 @@ class JobUpdateView(UpdateView):
     model=Jobs
     form_class=JobChangeForm
     success_url=reverse_lazy("index")
+
+# localhost8000/jobs/<int:pk>/application
+class JobapplicationListView(View):
+    def get(self,request,*args,**kwargs):
+        id=kwargs.get("pk")
+        job_obj=Jobs.objects.get(id=id)
+        qs=Applications.objects.filter(job=job_obj)
+        return render(request,"Applications.html",{"data":qs})
+

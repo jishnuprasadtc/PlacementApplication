@@ -11,6 +11,8 @@ urlpatterns = [
     path("profile/<int:pk>/change",views.profileEditView.as_view(),name="profile-edit"),
     path("jobs/<int:pk>",views.JobDetailView.as_view(),name='job-detail'),
     path("job/<int:pk>/apply",views.ApplyJob.as_view(),name='job-apply'),
-    path("application/all",views.ApplicationsListView.as_view(),name='myapplication')
+    path("application/all",views.ApplicationsListView.as_view(),name='myapplication'),
+    path("jobs/<int:pk>/save",views.JobSaveView.as_view(),name='job-save'),
+    path("jobs/saved/all",views.SaveJobView.as_view(),name='saved-job')
 
 ]
